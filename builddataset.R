@@ -20,6 +20,10 @@ subjectprefix <- 'iuyt-'
 fileprefix <- 'asdf-'
 biosampleprefix <- 'jklh-'
   
+## The early 2021 model does not have disease, post-July 2021 does. 
+## 'yes' for disease support, 'no' for the older model
+supportfordisease <- 'yes'
+  
 ## Point values: change to any other point value to increase/decrease size of data
 ### Number of files in file table
 numfile <- 1000
@@ -56,13 +60,13 @@ collections <- c("arbitraryone"="a collection of files with a randomly chosen fo
 ###################################################################################
 ###################################################################################
 
-
 ## Load libraries
 
 library(stringr)
 library(stringi)
 library(data.table)
 library(dplyr)
+
 
 ## Files with input data
 ### If you want to add/change/delete assays, file_formats, anatomy, disease, or data_types directly edit these files
@@ -304,7 +308,6 @@ ncbi[1,] <- c("NCBI:txid9606", "species", "Homo sapiens", "human")
 ## Write out
 
 dir.create(outputfoldername, showWarnings = F)
-write.table(biosampletable, paste(outputfoldername,"/biosample.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
 write.table(biosamplefromsubject, paste(outputfoldername,"/biosample_from_subject.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
 write.table(biosampleincollection, paste(outputfoldername,"/biosample_in_collection.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
 write.table(collectiontable, paste(outputfoldername,"/collection.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
@@ -319,13 +322,18 @@ write.table(projectinproject, paste(outputfoldername,"/project_in_project.tsv", 
 write.table(subjecttable, paste(outputfoldername,"/subject.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
 write.table(subjectincollection, paste(outputfoldername,"/subject_in_collection.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
 write.table(subjectroletaxonomy, paste(outputfoldername,"/subject_role_taxonomy.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
-write.table(subjectdisease, paste(outputfoldername,"/subject_disease.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
-write.table(biosampledisease, paste(outputfoldername,"/biosample_disease.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
 write.table(collectiondefbyproject, paste(outputfoldername,"/collection_defined_by_project.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
 write.table(collectionincollection, paste(outputfoldername,"/collection_in_collection.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
 write.table(ncbi, paste(outputfoldername,"/ncbi_taxonomy.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
 write.table(filedescribescollection, paste(outputfoldername,"/file_describes_collection.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
 
-download.file("https://osf.io/e5tc2/download", paste(outputfoldername,"/C2M2_datapackage.json", sep = ""))
-
+if (supportfordisease=='yes') {
+  write.table(subjectdisease, paste(outputfoldername,"/subject_disease.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
+  write.table(biosampledisease, paste(outputfoldername,"/biosample_disease.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
+  write.table(biosampletable, paste(outputfoldername,"/biosample.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
+  system(paste("cp ./C2M2_July_datapackage.json ", outputfoldername, sep = "" ))
+  } else {
+  write.table(select(biosampletable, -assay_type), paste(outputfoldername,"/biosample.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
+  download.file("https://osf.io/e5tc2/download", paste(outputfoldername,"/C2M2_datapackage.json", sep = ""))
+}
 system(paste("python3 build_term_tables.py ", outputfoldername, "/", sep = ""))
