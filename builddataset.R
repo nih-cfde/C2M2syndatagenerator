@@ -1,56 +1,63 @@
-## Makeing fake C2M2 data
+# Makeing synthetic  C2M2 data
 
-library(stringr)
-library(stringi)
-library(data.table)
-library(dplyr)
+# This tool creates a valid C2M2 instance. 
+# Every settable option must have at least one value
 
-## Settable Options
 
-### Name of DCC and of outputfolder. Change output folder to avoid overwrites
+###################################################################################
+###################################################################################
+# --------------------------------User Settable Options-------------------------------
+## Customize your synthetic DCC
+## If you run multiple times, be sure to change output folder to avoid overwrites
+
 dcc <- c("procrastinomics"="the best dcc") # name=description
 outputfoldername <- "disease1000"
 dccabbrev <- "procca"
 website <- "http://acharbonneau.github.io/"
 email <- "achar@ucdavis.edu"
 submitter <- "Amanda Charbonneau"
-
-### Point values: change to any other point value to increase/decrease size of data
-
-#### number of files
+subjectprefix <- 'iuyt-'
+fileprefix <- 'asdf-'
+biosampleprefix <- 'jklh-'
+  
+## Point values: change to any other point value to increase/decrease size of data
+### Number of files in file table
 numfile <- 1000
-#### number of biosamples
+### Number of biosamples in biosample table
 numbio <- 57
-#### number of subjects
+### Number of subjects in subject table
 numsub <- 30
-#### maximum number of assays, file_formats, anatomy, disease, or data_types
+### Maximum number of assays, file_formats, anatomy, disease, and data_types
+### Generates a random number of each, up to the max
 maxtypes <- 15
-#### allow for missing non-required metadata values in percentage 15 = 15% missingness
+### Allow for missing non-required metadata values as a percentage of total values
+### 15 = 15% missingness. Must be value between 0 and 100
 filesmissing <- 10
 biosamplesmissing <- 12
 subjectsmissing <- 5
 diseasemissing <- 40
-
-
-#### Date range
-
+### Date range. For generating creation dates
 startdate <- '1999/01/01'
 enddate <- '2000/01/01'
-
+### Set subject granularity and subject role
+### Can accept comma seperated lists. Script will randomly combine them
 subjectgranularity <- c("cfde_subject_granularity:0")
 subjectrole <- c("NCBI:txid9606")
 
-### Lists: add/subtract values from lists to change complexity of data
-### Lists must be key value pairs: "title"="description"
-
-#currently only a single namespace is supported
-namespace <- c("tag:procrastinomics.com,2021-07-23:"="the best namespace")
+### Arrays: add/subtract values from lists to change complexity of data
+### Arrays must be key value pairs: "title"="description"
+namespace <- c("tag:procrastinomics.com,2021-07-23:"="the best namespace") #currently only a single namespace is supported
 mainproject <- c("queso"="the main project")
 projects <- c("taco"="a project with a hard shell", "burrito"="a rolled project", "nachos"="a spread out project")
 collections <- c("arbitraryone"="a collection of files with a randomly chosen format", "arbitrarytwo"="a collection of things with a randomly chosen datatype")
 
-## Files with input data
+#---------------------------End of Settable Options--------------------------------
+###################################################################################
+###################################################################################
+###################################################################################
 
+
+## Files with input data
 ### If you want to add/change/delete assays, file_formats, anatomy, disease, or data_types directly edit these files
 types <- sample(1:maxtypes, 5, replace = T)
 
@@ -59,6 +66,13 @@ assaytype <- read.csv("CVtables/assay_type.tsv", sep = "\t") %>% filter(str_dete
 datatype <- sample_n(read.csv("CVtables/data_type.tsv", sep = "\t"), types[3], replace = T) %>% unique() %>% droplevels()
 disease <- sample_n(read.csv("CVtables/disease.tsv", sep = "\t"), types[4], replace = T) %>% unique() %>% droplevels()
 fileformat <- sample_n(read.csv("CVtables/file_format.tsv", sep = "\t"), types[5], replace = T) %>% unique() %>% droplevels()
+
+## Load libraries
+
+library(stringr)
+library(stringi)
+library(data.table)
+library(dplyr)
 
 
 ## Base tables
@@ -70,7 +84,7 @@ colnames(filetable) <- c("id_namespace", "local_id", "project_id_namespace",
                          "sha256", "md5", "filename", "file_format", "data_type",
                          "assay_type", "mime_type")
 filetable$id_namespace <- names(namespace)
-filetable$local_id <- paste('asdf-', stri_rand_strings(numfile, 3, pattern = "[0-9]"), str_pad(c(1:numfile),6, pad="0"), sep="")
+filetable$local_id <- paste(fileprefix, stri_rand_strings(numfile, 3, pattern = "[0-9]"), str_pad(c(1:numfile),6, pad="0"), sep="")
 filetable$project_id_namespace <- names(namespace)
 filetable$project_local_id <- sample(names(projects), numfile, replace = T)
 filetable$persistent_id <- ""
@@ -101,7 +115,7 @@ colnames(biosampletable) <- c("id_namespace", "local_id", "project_id_namespace"
                               "project_local_id", "persistent_id", "creation_time",
                               "assay_type", "anatomy")
 biosampletable$id_namespace <- names(namespace)
-biosampletable$local_id <- paste('jklh-', stri_rand_strings(numbio, 3, pattern = "[0-9]"), str_pad(c(1:numbio),6, pad="0"), sep="")
+biosampletable$local_id <- paste(biosampleprefix, stri_rand_strings(numbio, 3, pattern = "[0-9]"), str_pad(c(1:numbio),6, pad="0"), sep="")
 biosampletable$project_id_namespace <- names(namespace)
 biosampletable$project_local_id <- sample(names(projects), numbio, replace = T)
 biosampletable$persistent_id <- ""
@@ -121,7 +135,7 @@ colnames(subjecttable) <- c("id_namespace", "local_id", "project_id_namespace",
                             "project_local_id", "persistent_id", "creation_time",
                             "granularity")
 subjecttable$id_namespace <- names(namespace)
-subjecttable$local_id <- paste('iuyt-', stri_rand_strings(numsub, 3, pattern = "[0-9]"), str_pad(c(1:numsub),6, pad="0"), sep="")
+subjecttable$local_id <- paste(subjectprefix, stri_rand_strings(numsub, 3, pattern = "[0-9]"), str_pad(c(1:numsub),6, pad="0"), sep="")
 subjecttable$project_id_namespace <- names(namespace)
 subjecttable$project_local_id <- sample(names(projects), numsub, replace = T)
 subjecttable$persistent_id <- ""
@@ -279,7 +293,7 @@ colnames(subjectroletaxonomy) <- c("subject_id_namespace", "subject_local_id", "
 subjectroletaxonomy$subject_id_namespace <- names(namespace)
 subjectroletaxonomy$subject_local_id <- subjecttable$local_id
 subjectroletaxonomy$role_id <- "cfde_subject_role:0"
-subjectroletaxonomy$taxonomy_id <- subjectrole
+subjectroletaxonomy$taxonomy_id <- sample(subjectrole, numsub, replace = T)
 
 ## Reference tables
 
@@ -316,5 +330,3 @@ write.table(filedescribescollection, paste(outputfoldername,"/file_describes_col
 download.file("https://osf.io/e5tc2/download", paste(outputfoldername,"/C2M2_datapackage.json", sep = ""))
 
 system(paste("python3 build_term_tables.py ", outputfoldername, "/", sep = ""))
-
-
