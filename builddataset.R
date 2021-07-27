@@ -326,17 +326,17 @@ write.table(collectiondefbyproject, paste(outputfoldername,"/collection_defined_
 write.table(collectionincollection, paste(outputfoldername,"/collection_in_collection.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
 write.table(ncbi, paste(outputfoldername,"/ncbi_taxonomy.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
 write.table(filedescribescollection, paste(outputfoldername,"/file_describes_collection.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
-system(paste("python3 build_term_tables.py ", outputfoldername, "/", sep = ""))
 
 if (supportfordisease=='yes') {
   write.table(subjectdisease, paste(outputfoldername,"/subject_disease.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
   write.table(biosampledisease, paste(outputfoldername,"/biosample_disease.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
   write.table(biosampletable, paste(outputfoldername,"/biosample.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
+  system(paste("python3 build_term_tables.py ", outputfoldername, "/", sep = ""))
   system(paste("cp ./C2M2_July_datapackage.json ", outputfoldername, sep = "" ))
-  } 
-else {
+} else {
   write.table(select(biosampletable, -assay_type), paste(outputfoldername,"/biosample.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
   download.file("https://osf.io/e5tc2/download", paste(outputfoldername,"/C2M2_datapackage.json", sep = ""))
+  system(paste("python3 build_term_tables.py ", outputfoldername, "/", sep = ""))
   system(paste("rm ", outputfoldername, "/disease.tsv", sep = ""))
   read.csv(paste(outputfoldername, "/assay_type.tsv", sep = ""), sep = "\t") %>% select(-synonyms) %>% write.table(paste(outputfoldername, "/assay_type.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
   read.csv(paste(outputfoldername, "/anatomy.tsv", sep = ""), sep = "\t") %>% select(-synonyms) %>% write.table(paste(outputfoldername, "/anatomy.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
