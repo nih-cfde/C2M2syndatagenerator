@@ -1,0 +1,13 @@
+name: 2021-cfde-rnaseq-in-cloud
+channels:
+    - conda-forge
+    - bioconda
+    - defaults
+dependencies:
+    - r-base
+    - r-irkernel=1.1
+    - r-devtools
+    - r-stringr
+    - r-stringi
+    - r-data.table
+    - r-dplyr
