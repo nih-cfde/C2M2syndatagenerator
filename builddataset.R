@@ -57,6 +57,13 @@ collections <- c("arbitraryone"="a collection of files with a randomly chosen fo
 ###################################################################################
 
 
+## Load libraries
+
+library(stringr)
+library(stringi)
+library(data.table)
+library(dplyr)
+
 ## Files with input data
 ### If you want to add/change/delete assays, file_formats, anatomy, disease, or data_types directly edit these files
 types <- sample(1:maxtypes, 5, replace = T)
@@ -66,14 +73,6 @@ assaytype <- read.csv("CVtables/assay_type.tsv", sep = "\t") %>% filter(str_dete
 datatype <- sample_n(read.csv("CVtables/data_type.tsv", sep = "\t"), types[3], replace = T) %>% unique() %>% droplevels()
 disease <- sample_n(read.csv("CVtables/disease.tsv", sep = "\t"), types[4], replace = T) %>% unique() %>% droplevels()
 fileformat <- sample_n(read.csv("CVtables/file_format.tsv", sep = "\t"), types[5], replace = T) %>% unique() %>% droplevels()
-
-## Load libraries
-
-library(stringr)
-library(stringi)
-library(data.table)
-library(dplyr)
-
 
 ## Base tables
 
