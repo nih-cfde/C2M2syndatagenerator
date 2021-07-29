@@ -162,7 +162,7 @@ collectiontable$abbreviation <- names(collections)
 collectiontable$name <- names(collections)
 collectiontable$description <- collections
 
-namespacetable <- as.data.frame(t(as.matrix( c(namespace, dccabbrev, names(dcc), dcc)) ))
+namespacetable <- as.data.frame(t(as.matrix( c(names(namespace), dccabbrev, names(dcc), dcc)) ))
 colnames(namespacetable) <- c("id", "abbreviation", "name", "description")
 
 contacttable <- as.data.frame(t(as.matrix(c(email, submitter, names(namespace), names(mainproject), dccabbrev, names(dcc), dcc, website))))
