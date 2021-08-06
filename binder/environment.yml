@@ -11,3 +11,4 @@ dependencies:
     - r-stringi
     - r-data.table
     - r-dplyr
+    - r-numbers

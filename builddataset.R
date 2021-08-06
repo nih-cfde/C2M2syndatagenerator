@@ -16,14 +16,15 @@ dccabbrev <- "procca"
 website <- "http://acharbonneau.github.io/"
 email <- "achar@ucdavis.edu"
 submitter <- "Amanda Charbonneau"
+# For localID
 subjectprefix <- 'iuyt-'
 fileprefix <- 'asdf-'
 biosampleprefix <- 'jklh-'
-  
+
 ## The early 2021 model does not have disease, post-July 2021 does. 
 ## 'yes' for disease support, 'no' for the older model
 supportfordisease <- 'yes'
-  
+
 ## Point values: change to any other point value to increase/decrease size of data
 ### Number of files in file table
 numfile <- 1000
@@ -31,9 +32,14 @@ numfile <- 1000
 numbio <- 57
 ### Number of subjects in subject table
 numsub <- 30
-### Maximum number of assays, file_formats, anatomy, disease, and data_types
-### Generates a random number of each, up to the max
-maxtypes <- 15
+### Number of assays, file_formats, anatomy, disease, and data_types
+anatomys <- 7
+assays <- 6
+datatypes <- 7
+diseases <- 3
+fileformats <- 8
+### How randomized should metadata be on a scale from 1-100? 1= fewest possible combinations, 100= every unique combination
+metadata_random <- 10
 ### Allow for missing non-required metadata values as a percentage of total values
 ### 15 = 15% missingness. Must be value between 0 and 100
 filesmissing <- 10
@@ -66,17 +72,25 @@ library(stringr)
 library(stringi)
 library(data.table)
 library(dplyr)
+library(numbers)
 
 
 ## Files with input data
 ### If you want to add/change/delete assays, file_formats, anatomy, disease, or data_types directly edit these files
-types <- sample(1:maxtypes, 5, replace = T)
 
-anatomy <- sample_n(read.csv("CVtables/anatomy.tsv", sep = "\t"), types[1], replace = T) %>% unique() %>% droplevels()
-assaytype <- read.csv("CVtables/assay_type.tsv", sep = "\t") %>% filter(str_detect(id, "OBI")) %>% sample_n(types[2]*2, replace = T) %>% unique() %>% droplevels()
-datatype <- sample_n(read.csv("CVtables/data_type.tsv", sep = "\t"), types[3], replace = T) %>% unique() %>% droplevels()
-disease <- sample_n(read.csv("CVtables/disease.tsv", sep = "\t"), types[4], replace = T) %>% unique() %>% droplevels()
-fileformat <- sample_n(read.csv("CVtables/file_format.tsv", sep = "\t"), types[5], replace = T) %>% unique() %>% droplevels()
+anatomy <- sample_n(read.csv("CVtables/anatomy.tsv", sep = "\t"), anatomys, replace = T) %>% unique() %>% droplevels()
+assaytype <- read.csv("CVtables/assay_type.tsv", sep = "\t") %>% filter(str_detect(id, "OBI")) %>% sample_n(assays, replace = T) %>% unique() %>% droplevels()
+datatype <- sample_n(read.csv("CVtables/data_type.tsv", sep = "\t"), datatypes, replace = T) %>% unique() %>% droplevels()
+disease <- sample_n(read.csv("CVtables/disease.tsv", sep = "\t"), diseases, replace = T) %>% unique() %>% droplevels()
+fileformat <- sample_n(read.csv("CVtables/file_format.tsv", sep = "\t"), fileformats, replace = T) %>% unique() %>% droplevels()
+multiplier <- numbers::mLCM(c(anatomys, assays, datatypes, diseases, fileformats))
+metadatasets <- data.frame( matrix(ncol = 4, nrow = multiplier))
+colnames(metadatasets) <- c("anatomy", "assay", "data", "file")
+metadatasets$anatomy <- anatomy$id
+metadatasets$assay <- assaytype$id
+metadatasets$data <- datatype$id
+metadatasets$file <- fileformat$id
+metadatasets <- metadatasets[sample(c(1:multiplier), size = round(metadata_random*(multiplier/100), digits = 0), replace = F),]
 
 ## Base tables
 
@@ -97,9 +111,7 @@ filetable$uncompressed_size_in_bytes <- ""
 filetable$sha256 <- stri_rand_strings(numfile, 64, pattern = "[a-fA-F0-9]")
 filetable$md5 <- ""
 filetable$filename <- paste(stri_rand_strings(numfile, 3, pattern = "[A-Z]"), "_",stri_rand_strings(numfile, 6, pattern = "[0-9]"), sep="") 
-filetable$file_format <- sample(fileformat$id, numfile, replace = T)
-filetable$data_type <- sample(datatype$id, numfile, replace = T)
-filetable$assay_type <-  sample(assaytype$id[1:types[2]], numfile, replace = T)
+filetable[,c(12, 13, 14)] <- metadatasets[sample(1:nrow(metadatasets), numfile, replace = T),c(4,3,2)]
 filetable$mime_type <-""
 
 if (filesmissing > 0) {
@@ -123,16 +135,15 @@ biosampletable$project_id_namespace <- names(namespace)
 biosampletable$project_local_id <- sample(names(projects), numbio, replace = T)
 biosampletable$persistent_id <- ""
 biosampletable$creation_time <- sample(seq(as.Date(startdate), as.Date(enddate), by="day"), numbio, replace = T)
-biosampletable$assay_type <- sample(assaytype$id[], numbio, replace = T)
-biosampletable$anatomy <- sample(anatomy$id, numbio, replace = T)
+biosampletable[,c(7,8)] <- metadatasets[sample(1:nrow(metadatasets), numbio, replace = T),c(2,1)]
 if (biosamplesmissing > 0) {
   remove <- round(numbio*(biosamplesmissing/100))
   biosampletable$creation_time[c(sample(1:numbio, remove, replace = T))] <- NA
   biosampletable$assay_type[c(sample(1:numbio, remove, replace = T))] <- NA
   biosampletable$anatomy[c(sample(1:numbio, remove, replace = T))] <- NA
 }  
-                         
-                         
+
+
 subjecttable <- data.frame(matrix(nrow=numsub, ncol = 7))
 colnames(subjecttable) <- c("id_namespace", "local_id", "project_id_namespace", 
                             "project_local_id", "persistent_id", "creation_time",
@@ -238,7 +249,7 @@ fileincollection$collection_local_id <- c(rep(collectiontable$local_id[1],length
 
 filedescribescollection <- data.frame(matrix(nrow=0, ncol = 4))
 colnames(filedescribescollection) <- c( "file_id_namespace", "file_local_id",
-                                       "collection_id_namespace", "collection_local_id")
+                                        "collection_id_namespace", "collection_local_id")
 
 
 
@@ -252,7 +263,7 @@ subjectincollection <- left_join(fileincollection, filedescribessubject) %>%
 
 collectionincollection <- data.frame(matrix(nrow=0, ncol = 4))
 colnames(collectionincollection) <- c( "superset_collection_id_namespace", "superset_collection_local_id",
-                                   "subset_collection_id_namespace", "subset_collection_local_id")
+                                       "subset_collection_id_namespace", "subset_collection_local_id")
 
 
 ### Projects
@@ -267,13 +278,13 @@ projectinproject$child_project_local_id <- names(projects)
 
 collectiondefbyproject <- data.frame(matrix(nrow=0, ncol = 4))
 colnames(collectiondefbyproject) <- c( "collection_id_namespace", "collection_local_id",
-                                         "project_id_namespace", "project_local_id")
+                                       "project_id_namespace", "project_local_id")
 
 ### Disease
 
 subjectdisease <- data.frame(matrix(nrow=length(subjecttable$local_id), ncol = 3))
 colnames(subjectdisease) <- c("subject_id_namespace", "subject_local_id",
-                                "disease")
+                              "disease")
 subjectdisease$subject_id_namespace <- names(namespace)
 subjectdisease$subject_local_id <- subjecttable$local_id
 subjectdisease$disease <- sample(disease$id, length(subjecttable$local_id), replace = T)
@@ -282,7 +293,7 @@ if (diseasemissing > 0) {
   remove <- round(length(subjectdisease$subject_local_id)*(diseasemissing/100))
   subjectdisease$disease[c(sample(1:length(subjecttable$local_id), remove, replace = T))] <- NA
   subjectdisease <- filter(subjectdisease, !is.na(disease))
-  } 
+} 
 
 biosampledisease <- full_join(subjectdisease, biosamplefromsubject) %>% 
   select(biosample_id_namespace, biosample_local_id, disease) %>%
