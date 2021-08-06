@@ -15,5 +15,6 @@ To download results:
 2. Click the blue gear that says `More`
 3. Choose `Export`
 
+------
 
-The above binder runs great for small datesets, but can't generate more than about a million lines per file. To generate larger synthetic datasets, use pangeo binder. To launch with pangeo instead use [![Binder](https://binder.pangeo.io/badge_logo.svg)](https://binder.pangeo.io/v2/gh/nih-cfde/C2M2syndatagenerator/main)
+The above binder runs great for small datasets, but can't generate more than about a million lines per file. To generate larger synthetic datasets, use pangeo binder. To launch with pangeo instead use [![Binder](https://binder.pangeo.io/badge_logo.svg)](https://binder.pangeo.io/v2/gh/nih-cfde/C2M2syndatagenerator/main)
