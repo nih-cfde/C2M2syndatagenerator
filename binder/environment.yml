@@ -12,3 +12,4 @@ dependencies:
     - r-data.table
     - r-dplyr
     - r-numbers
+    - osfclient
