@@ -1,26 +1,40 @@
 # Makeing synthetic  C2M2 data
 
 # This tool creates a valid C2M2 instance. 
-# Every settable option must have at least one value
-
-
 ###################################################################################
 ###################################################################################
 # --------------------------------User Settable Options-------------------------------
 ## Customize your synthetic DCC
-## If you run multiple times, be sure to change output folder to avoid overwrites
 
-dcc <- c("procrastinomics"="the best dcc") # name=description
-c2m2id <- "cfde_registry_dcc:test1" # must be a valid ID starting with `cfde_registry_dcc:`, currently: "test1", "hmp", "gtex", "motrpac", "kidsfirst", "metabolomics", "lincs", "4dn", "idg", "exrna", "sparc", "test2"
+## To make a given package easily identifiable when browsing the portal be sure to change these 5 options for each run:
+
+filenameprefix <- 'kenfs'    
+biosampleprefix <- 'jklh-'
+subjectprefix <- 'octo-'
+collections <- c("arbitraryone"="a collection of files with a randomly chosen format", "arbitrarytwo"="a collection of things with a randomly chosen datatype")
 outputfoldername <- "newnovelvocabulary"
+
+# collections uses comma separated keypairs: "title"="description" 
+### be sure to add or subtract entire pairs at once
+
+### The rest of these parameters can be left the same, or changed however you like
+### Every settable option must have at least one value
+
+c2m2id <- "cfde_registry_dcc:test1" # must be a valid ID starting with `cfde_registry_dcc:`, currently: "test1", "hmp", "gtex", "motrpac", "kidsfirst", "metabolomics", "lincs", "4dn", "idg", "exrna", "sparc", "test2"
 dccabbrev <- "procca"
 website <- "http://acharbonneau.github.io/"
 email <- "achar@ucdavis.edu"
 submitter <- "Amanda Charbonneau"
-# For localID
-subjectprefix <- 'octo-'
 fileprefix <- 'asdf-'
-biosampleprefix <- 'jklh-'
+
+## Arrays: add/subtract values from lists to change complexity of data
+### Arrays must be key value pairs: "title"="description"
+### be sure to add or subtract entire pairs at once
+
+namespace <- c("tag:procrastinomics.com,2021-07-23:"="the best namespace") #currently only a single namespace is supported
+mainproject <- c("queso"="the main project")
+projects <- c("taco"="a project with a hard shell", "burrito"="a rolled project", "nachos"="a spread out project")
+dcc <- c("procrastinomics"="the best dcc") # name=description
 
 ## Point values: change to any other point value to increase/decrease size of data
 ### Number of files in file table
@@ -47,20 +61,20 @@ subjectgranularitys <- 2 #must be a number between 0-6
 subjectroles <- 1 # must be a number between 0-8
 substances <- 10  #max is 5000
 
-### Do you want to include demographic data?
+## Do you want to include demographic data?
 subjectethnicity <- "yes"  #"yes" or "no"
 subjectrace <-  "yes"  #"yes" or "no"
 subjectsex <-  "yes"  #"yes" or "no"
-## Ages of subjects 
+### Ages of subjects 
 averageage <- 30  # number or NA to not include age
 standarddev <- 30 # number or NA to not include age
 
-### How randomized should metadata be on a scale from 1-100? 1= fewest possible combinations, 100= every unique combination
+## How randomized should metadata be on a scale from 1-100? 1= fewest possible combinations, 100= every unique combination
 metadata_random <- 10
 ### Should the metadata appear roughly equally? (yes/no)
 metadata_even <- "yes"
 
-### Allow for missing non-required metadata values as a percentage of total values
+## Allow for missing non-required metadata values as a percentage of total values
 ### 15 = 15% missingness. Must be value between 0 and 100
 ### filesmissing, biosamplesmissing, and subjectsmissing create missingness in those tables.
 ### associationsmissing creates missingness in association tables and collection associations
@@ -72,12 +86,6 @@ associationsmissing <- 20
 startdate <- '1999/01/01'
 enddate <- '2000/01/01'
 
-### Arrays: add/subtract values from lists to change complexity of data
-### Arrays must be key value pairs: "title"="description"
-namespace <- c("tag:procrastinomics.com,2021-07-23:"="the best namespace") #currently only a single namespace is supported
-mainproject <- c("queso"="the main project")
-projects <- c("taco"="a project with a hard shell", "burrito"="a rolled project", "nachos"="a spread out project")
-collections <- c("arbitraryone"="a collection of files with a randomly chosen format", "arbitrarytwo"="a collection of things with a randomly chosen datatype")
 
 #---------------------------End of Settable Options--------------------------------
 #        Click "Source" at the top left of this screen to run the code            #
