@@ -1,4 +1,4 @@
-# Makeing synthetic  C2M2 data
+# Making synthetic  C2M2 data
 
 # This tool creates a valid C2M2 instance. 
 ###################################################################################
@@ -8,11 +8,12 @@
 
 ## To make a given package easily identifiable when browsing the portal be sure to change these 5 options for each run:
 
-filenameprefix <- 'kenfs'    
-biosampleprefix <- 'jklh-'
-subjectprefix <- 'octo-'
-collections <- c("arbitraryone"="a collection of files with a randomly chosen format", "arbitrarytwo"="a collection of things with a randomly chosen datatype")
-outputfoldername <- "newnovelvocabulary"
+filenameprefix <- 'rmhfile-'    
+biosampleprefix <- 'rmhbios-'
+subjectprefix <- 'rmhsubj-'
+collections <- c("arbitraryone"="a collection of files with a randomly chosen format", 
+                 "arbitrarytwo"="a collection of things with a randomly chosen datatype")
+outputfoldername <- "rmhvocabulary"
 
 # collections uses comma separated keypairs: "title"="description" 
 ### be sure to add or subtract entire pairs at once
@@ -22,69 +23,70 @@ outputfoldername <- "newnovelvocabulary"
 
 c2m2id <- "cfde_registry_dcc:test1" # must be a valid ID starting with `cfde_registry_dcc:`, currently: "test1", "hmp", "gtex", "motrpac", "kidsfirst", "metabolomics", "lincs", "4dn", "idg", "exrna", "sparc", "test2"
 dccabbrev <- "procca"
-website <- "http://acharbonneau.github.io/"
-email <- "achar@ucdavis.edu"
-submitter <- "Amanda Charbonneau"
-fileprefix <- 'asdf-'
+website <- "https://www.raynamharris.com/"
+email <- "rmharris@ucdavis.edu"
+submitter <- "Rayna Harris"
+fileprefix <- 'rmh-'
 
 ## Arrays: add/subtract values from lists to change complexity of data
 ### Arrays must be key value pairs: "title"="description"
 ### be sure to add or subtract entire pairs at once
 
-namespace <- c("tag:procrastinomics.com,2021-07-23:"="the best namespace") #currently only a single namespace is supported
-mainproject <- c("queso"="the main project")
-projects <- c("taco"="a project with a hard shell", "burrito"="a rolled project", "nachos"="a spread out project")
-dcc <- c("procrastinomics"="the best dcc") # name=description
+namespace <- c("tag:raynamharris.com,2022-03-28:"="the best namespace") #currently only a single namespace is supported
+mainproject <- c("2022mar23"="the main project")
+projects <- c("breasttest"="a project with breat tissue foo")
+dcc <- c("raynamharris"="test1") # name=description
 
 ## Point values: change to any other point value to increase/decrease size of data
 ### Number of files in file table
-numfile <- 1537
+numfile <- 1100
 ### Number of biosamples in biosample table
-numbio <- 63
+numbio <- 1000
 ### Number of subjects in subject table
-numsub <- 5
+numsub <- 100
 ### Maximum number of controlled vocabulary terms to include
-anatomys <- 33
-assays <- 9
-analyses <- 4
+anatomys <- 3
+assays <- 3
+analyses <- 3
 bioassays <- 3
 compressionformats <- c("format:3987", "format:3615")
 datatypes <- 5
 dbgap_permissions <- 3
-diseases <- 8
-fileformats <- 4
-genes <- 34  #max is 5000
+diseases <- 4
+fileformats <- 3 + 2
+genes <- 5000  #max is 5000
 phenotypes <- 7 #max is 5000
-proteins <- 4
-species <- 2
-subjectgranularitys <- 2 #must be a number between 0-6
+proteins <- 5000
+species <- 1
+subjectgranularitys <- 0 #must be a number between 0-6
 subjectroles <- 1 # must be a number between 0-8
-substances <- 10  #max is 5000
+substances <- 500  #max is 5000
 
 ## Do you want to include demographic data?
-subjectethnicity <- "yes"  #"yes" or "no"
-subjectrace <-  "yes"  #"yes" or "no"
+subjectethnicity <- "no"  #"yes" or "no"
+subjectrace <-  "no"  #"yes" or "no"
 subjectsex <-  "yes"  #"yes" or "no"
 ### Ages of subjects 
-averageage <- 30  # number or NA to not include age
-standarddev <- 30 # number or NA to not include age
+averageage <- 38  # number or NA to not include age
+standarddev <- 10 # number or NA to not include age
 
-## How randomized should metadata be on a scale from 1-100? 1= fewest possible combinations, 100= every unique combination
+## How randomized should metadata be on a scale from 1-100? 
+# 1= fewest possible combinations, 100= every unique combination
 metadata_random <- 10
 ### Should the metadata appear roughly equally? (yes/no)
 metadata_even <- "yes"
 
 ## Allow for missing non-required metadata values as a percentage of total values
-### 15 = 15% missingness. Must be value between 0 and 100
-### filesmissing, biosamplesmissing, and subjectsmissing create missingness in those tables.
+### 15 = 15% missingenes. Must be value between 0 and 100
+### filesmissing, biosamplesmissing, and subjectsmissing create missingenes in those tables.
 ### associationsmissing creates missingness in association tables and collection associations
 filesmissing <- 10
 biosamplesmissing <- 12
 subjectsmissing <- 5
 associationsmissing <- 20 
 ### Date range. For generating creation dates
-startdate <- '1999/01/01'
-enddate <- '2000/01/01'
+startdate <- '1983/01/01'
+enddate <- '1984/01/01'
 
 
 #---------------------------End of Settable Options--------------------------------
@@ -102,29 +104,59 @@ library(dplyr)
 library(numbers)
 
 
+
 ## Files with input data
 ## Each is randomly sampled to only pull in as many terms as are asked for above
 ### If you want to add/change/delete assays, file_formats, anatomy, disease, or data_types directly edit the files in the CVtables directory
 
-anatomy_table <- sample_n(fread("CVtables/anatomy.tsv", sep = "\t"), anatomys, replace = T) %>% unique() %>% droplevels()
-assaytype_table <- fread("CVtables/assay_type.tsv", sep = "\t") %>% filter(str_detect(id, "OBI")) %>% sample_n(assays, replace = T) %>% unique() %>% droplevels()
-analysistype_table <- fread("CVtables/assay_type.tsv", sep = "\t") %>% filter(str_detect(id, "OBI")) %>% sample_n(analyses, replace = T) %>% unique() %>% droplevels()
-bioassaytype_table <- fread("CVtables/assay_type.tsv", sep = "\t") %>% filter(str_detect(id, "OBI")) %>% sample_n(bioassays, replace = T) %>% unique() %>% droplevels()
-datatype_table <- sample_n(fread("CVtables/data_type.tsv", sep = "\t"), datatypes, replace = T) %>% unique() %>% droplevels()
-disease_table <- sample_n(fread("CVtables/disease.tsv", sep = "\t"), diseases, replace = T) %>% unique() %>% droplevels()
-fileformat_table <- sample_n(fread("CVtables/file_format.tsv", sep = "\t"), fileformats, replace = T) 
-fileformat_table <- rbind(fileformat_table, filter(fread("CVtables/file_format.tsv", sep = "\t"), id %in% compressionformats))%>% unique() %>% droplevels()
-gene_table <- sample_n(fread("CVtables/gene_tiny.tsv", sep = "\t"), genes, replace = T) %>% unique() %>% droplevels()
-granularity_table <- sample_n(fread("CVtables/subject_granularity.tsv", sep = "\t"), subjectgranularitys, replace = T) %>% unique() %>% droplevels()
-phenotype_table <- sample_n(fread("CVtables/phenotype_tiny.tsv", sep = "\t"), phenotypes, replace = T) %>% unique() %>% droplevels()
+anatomy_table <- fread("CVtables/anatomy.tsv", sep = "\t") %>% 
+  filter(grepl("UBERON:0000310|UBERON:0000007|UBERON:0000178", id)) %>%
+  unique() %>% droplevels()
+head(anatomy_table)
+
+assaytype_table <- fread("CVtables/assay_type.tsv", sep = "\t") %>% filter(str_detect(id, "OBI")) %>% filter(grepl("OBI:0001177|OBI:0000366|OBI:2100072", id)) %>% unique() %>% droplevels()
+analysistype_table <- assaytype_table
+bioassaytype_table <- assaytype_table
+
+datatype_table <-  fread("CVtables/data_type.tsv", sep = "\t") %>% filter(grepl("data:0848|0863|2622|0943|3914", id)) %>% unique() %>% droplevels()
+
+disease_table <- fread("CVtables/disease.tsv") %>%
+  filter(grepl("DOID:0050671|0060075|DOID:0060078|DOID:1614", id)) %>%
+  unique() %>% droplevels()
+  
+
+fileformat_table <- fread("CVtables/file_format.tsv")  %>%
+  filter(grepl("format:1930|format:1929|format:3824", id)) 
+fileformat_table <- rbind(fileformat_table, 
+                          filter(fread("CVtables/file_format.tsv", sep = "\t"), 
+                                 id %in% compressionformats))%>%
+  unique() %>% droplevels()
+
+gene_table <- fread("CVtables/gene_tiny.tsv", sep = "\t") %>%
+  filter(!grepl("mitochond|pseudogene|novel|non-functional", description)) %>%
+  sample_n(., genes, replace = T) %>% unique() %>% droplevels()
+
+granularity_table <- fread("CVtables/subject_granularity.tsv", sep = "\t") %>%
+  filter(id == "cfde_subject_granularity:0") %>% 
+  unique() %>% droplevels()
+
+
+phenotype_table <-fread("CVtables/phenotype_tiny.tsv", sep = "\t") %>%
+  filter(grepl("HP:0003002", id)) %>% 
+  unique() %>% droplevels()
+
 protein_table <- sample_n(fread("CVtables/protein_tiny.tsv", sep = "\t"), proteins, replace = T) %>% unique() %>% droplevels()
+
 ras_table <- paste("ras:phs", sample(10:1000000, dbgap_permissions), sep="")
 role_table <- sample_n(fread("CVtables/subject_role.tsv", sep = "\t"), subjectroles, replace = T) %>% unique() %>% droplevels()
 subjectethnicity_table <- fread("CVtables/subject_ethnicity.tsv", sep = "\t")
 subjectrace_table <- fread("CVtables/subject_race.tsv", sep = "\t")
 subjectsex_table <- fread("CVtables/subject_sex.tsv", sep = "\t")
-taxon_table <- sample_n(fread("CVtables/ncbi_taxonomy_tiny.tsv", sep= "\t"), species, replace = T)
-taxon_table <- rbind(taxon_table, filter(fread("CVtables/ncbi_taxonomy_tiny.tsv", sep= "\t"), id %in% gene_table$organism | id %in% protein_table$organism)) %>% unique() %>% droplevels()
+
+taxon_table <- fread("CVtables/ncbi_taxonomy_tiny.tsv", sep= "\t") %>%
+  filter(grepl("NCBI:txid9606", id))
+taxon_table
+
 substance_table <-sample_n(fread("CVtables/substance.records_for_first_5000_CIDs.max_100_synonyms_per_term.tsv", sep = "\t"), substances, replace = T) %>% unique() %>% droplevels()
 compound_table <-fread("CVtables/compound.first_5000_records.max_100_synonyms_per_term.tsv", sep = "\t")  %>% filter(id %in% substance_table$compound)
 
@@ -246,7 +278,7 @@ if (subjectethnicity == 'yes') {
   subject_tsv$ethnicity <- sample(c(NA, subjectethnicity_table$id), numsub, replace = T, prob = c(associationsmissing, 50, 50))
 }
 if (!is.na(averageage)){
-subject_tsv$age_at_enrollment <- rnorm(n = numsub, mean = averageage, sd = standarddev) %>% round(digits = 2) %>% abs()
+subject_tsv$age_at_enrollment <- rnorm(n = numsub, mean = averageage, sd = standarddev) %>% round(digits = 0) %>% abs()
 }
 
 if (subjectsmissing > 0) {
@@ -306,7 +338,7 @@ project_tsv$description <- allprojects
 ### biosample_from_subject.tsv
 biosample_from_subject_tsv <- right_join(biosample_tsv, subject_tsv, by = c("id_namespace", "project_local_id")) %>% 
   group_by(local_id.x) %>% slice(1) %>% 
-  mutate(age_at_sampling= abs(round(age_at_enrollment + (rnorm(n = 1, mean = 2, sd = .5)), digits = 2))) %>%
+  mutate(age_at_sampling= abs(round(age_at_enrollment + (rnorm(n = 1, mean = 2, sd = .5)), digits = 0))) %>%
   select(project_id_namespace.x, local_id.x, project_id_namespace.y, local_id.y, age_at_sampling)
 
 colnames(biosample_from_subject_tsv) <- c( "biosample_id_namespace", "biosample_local_id",
