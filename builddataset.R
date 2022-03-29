@@ -22,7 +22,7 @@ outputfoldername <- "rmhvocabulary"
 ### Every settable option must have at least one value
 
 c2m2id <- "cfde_registry_dcc:test1" # must be a valid ID starting with `cfde_registry_dcc:`, currently: "test1", "hmp", "gtex", "motrpac", "kidsfirst", "metabolomics", "lincs", "4dn", "idg", "exrna", "sparc", "test2"
-dccabbrev <- "procca"
+dccabbrev <- "raynamharris"
 website <- "https://www.raynamharris.com/"
 email <- "rmharris@ucdavis.edu"
 submitter <- "Rayna Harris"
@@ -689,8 +689,3 @@ write.table(taxon_table, paste(outputfoldername,"/ncbi_taxonomy.tsv", sep = ""),
 
 # system(paste("python3 CCfiles/build_term_tables.py ", outputfoldername, "/", sep = ""))
 system(paste("cp C2M2_datapackage.json ", outputfoldername, sep = "" ))
-
-
-
-
-
