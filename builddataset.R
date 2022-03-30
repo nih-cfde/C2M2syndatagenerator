@@ -22,7 +22,7 @@ outputfoldername <- "rmhvocabulary"
 ### Every settable option must have at least one value
 
 c2m2id <- "cfde_registry_dcc:test1" # must be a valid ID starting with `cfde_registry_dcc:`, currently: "test1", "hmp", "gtex", "motrpac", "kidsfirst", "metabolomics", "lincs", "4dn", "idg", "exrna", "sparc", "test2"
-dccabbrev <- "procca"
+dccabbrev <- "raynamharris"
 website <- "https://www.raynamharris.com/"
 email <- "rmharris@ucdavis.edu"
 submitter <- "Rayna Harris"
@@ -101,6 +101,7 @@ library(stringr)
 library(stringi)
 library(data.table)
 library(dplyr)
+library(tidyr)
 library(numbers)
 
 
@@ -133,19 +134,32 @@ fileformat_table <- rbind(fileformat_table,
   unique() %>% droplevels()
 
 gene_table <- fread("CVtables/gene_tiny.tsv", sep = "\t") %>%
-  filter(!grepl("mitochond|pseudogene|novel|non-functional", description)) %>%
+  filter(!grepl("mitochond|pseudogene|novel|non-functional|ENSG", description)) %>%
   sample_n(., genes, replace = T) %>% unique() %>% droplevels()
+head(gene_table)
+
 
 granularity_table <- fread("CVtables/subject_granularity.tsv", sep = "\t") %>%
   filter(id == "cfde_subject_granularity:0") %>% 
   unique() %>% droplevels()
 
+protein_table <- fread("CVtables/protein_tiny.tsv", sep = "\t") %>%
+  filter(organism == "NCBI:txid9606") %>%
+ # sample_n(., proteins, replace = T) %>% 
+  unique() %>% droplevels() 
+head(protein_table)
 
-phenotype_table <-fread("CVtables/phenotype_tiny.tsv", sep = "\t") %>%
-  filter(grepl("HP:0003002", id)) %>% 
-  unique() %>% droplevels()
+protein_gene <- protein_table %>%
+  separate(name, into = c("name", "human")) %>%
+  rename(protein = id) %>%
+  left_join(., gene_table, by = 'name') %>%
+  select(protein, id) %>%
+  rename(gene = id) %>%
+  filter(grepl("ENSG", gene)) 
+head(protein_gene)
 
-protein_table <- sample_n(fread("CVtables/protein_tiny.tsv", sep = "\t"), proteins, replace = T) %>% unique() %>% droplevels()
+phenotype_table <- sample_n(fread("CVtables/phenotype_tiny.tsv", sep = "\t"), phenotypes, replace = T) %>% unique() %>% droplevels()
+
 
 ras_table <- paste("ras:phs", sample(10:1000000, dbgap_permissions), sep="")
 role_table <- sample_n(fread("CVtables/subject_role.tsv", sep = "\t"), subjectroles, replace = T) %>% unique() %>% droplevels()
@@ -588,11 +602,11 @@ subject_role_taxonomy_tsv <- filter(subject_role_taxonomy_tsv, !is.na(taxonomy_i
 
 ### protein_gene.tsv
 
-protein_gene_tsv <- data.frame(matrix(nrow=proteins, ncol = 2))
-colnames(protein_gene_tsv) <- c("protein", "gene")
-protein_gene_tsv$protein <- sample(proteinweights[,2], proteins, replace = TRUE, prob = proteinweights[,1])
-protein_gene_tsv$gene <- sample(geneweights[,2], proteins, replace = TRUE, prob = geneweights[,1])
-protein_gene_tsv <- filter(protein_gene_tsv, !is.na(protein), !is.na(gene)) %>% unique() %>% droplevels()
+#protein_gene_tsv <- data.frame(matrix(nrow=proteins, ncol = 2))
+#colnames(protein_gene_tsv) <- c("protein", "gene")
+#protein_gene_tsv$protein <- sample(proteinweights[,2], proteins, replace = TRUE, prob = proteinweights[,1])
+#protein_gene_tsv$gene <- sample(geneweights[,2], proteins, replace = TRUE, prob = geneweights[,1])
+#protein_gene_tsv <- filter(protein_gene_tsv, !is.na(protein), !is.na(gene)) %>% unique() %>% droplevels()
 
 ### phenotype_gene.tsv
 
@@ -660,7 +674,7 @@ write.table(file_tsv, paste(outputfoldername,"/file.tsv", sep = ""), sep ="\t", 
 write.table(namespace_tsv, paste(outputfoldername,"/id_namespace.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
 write.table(project_in_project_tsv, paste(outputfoldername,"/project_in_project.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
 write.table(project_tsv, paste(outputfoldername,"/project.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
-write.table(protein_gene_tsv, paste(outputfoldername,"/protein_gene.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
+write.table(protein_table, paste(outputfoldername,"/protein_gene.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
 write.table(phenotype_disease_tsv, paste(outputfoldername,"/phenotype_disease.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
 write.table(phenotype_gene_tsv, paste(outputfoldername,"/phenotype_gene.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
 write.table(subject_disease_tsv, paste(outputfoldername,"/subject_disease.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "") 
@@ -681,7 +695,12 @@ write.table(disease_table, paste(outputfoldername,"/disease.tsv", sep = ""), sep
 write.table(fileformat_table, paste(outputfoldername,"/file_format.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
 write.table(gene_table, paste(outputfoldername,"/gene.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
 write.table(phenotype_table, paste(outputfoldername,"/phenotype.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
+
 write.table(protein_table, paste(outputfoldername,"/protein.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
+
+write.table(protein_gene, paste(outputfoldername,"/protein_gene.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
+
+
 write.table(substance_table, paste(outputfoldername,"/substance.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
 write.table(taxon_table, paste(outputfoldername,"/ncbi_taxonomy.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
 
@@ -691,6 +710,4 @@ write.table(taxon_table, paste(outputfoldername,"/ncbi_taxonomy.tsv", sep = ""),
 system(paste("cp C2M2_datapackage.json ", outputfoldername, sep = "" ))
 
 
-
-
-
+head(gene_table)
