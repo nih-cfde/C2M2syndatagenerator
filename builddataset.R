@@ -39,33 +39,34 @@ dcc <- c("raynamharris"="test1") # name=description
 
 ## Point values: change to any other point value to increase/decrease size of data
 ### Number of files in file table
-numfile <- 1100
+numfile <- 1537
 ### Number of biosamples in biosample table
-numbio <- 1000
+numbio <- 63
 ### Number of subjects in subject table
-numsub <- 100
+numsub <- 5
 ### Maximum number of controlled vocabulary terms to include
-anatomys <- 3
-assays <- 3
-analyses <- 3
+anatomys <- 33
+assays <- 9
+analyses <- 4
 bioassays <- 3
 compressionformats <- c("format:3987", "format:3615")
 datatypes <- 5
 dbgap_permissions <- 3
-diseases <- 4
-fileformats <- 3 + 2
-genes <- 5000  #max is 5000
+diseases <- 8
+fileformats <- 4
+genes <- 34  #max is 5000
 phenotypes <- 7 #max is 5000
-proteins <- 50
-species <- 1
-subjectgranularitys <- 1 #must be a number between 0-6
+proteins <- 4
+species <- 2
+subjectgranularitys <- 2 #must be a number between 0-6
 subjectroles <- 1 # must be a number between 0-8
-substances <- 500  #max is 5000
+substances <- 10  #max is 5000
 
 ## Do you want to include demographic data?
-subjectethnicity <- "no"  #"yes" or "no"
-subjectrace <-  "no"  #"yes" or "no"
+subjectethnicity <- "yes"  #"yes" or "no"
+subjectrace <-  "yes"  #"yes" or "no"
 subjectsex <-  "yes"  #"yes" or "no"
+
 ### Ages of subjects 
 averageage <- 38  # number or NA to not include age
 standarddev <- 10 # number or NA to not include age
@@ -90,7 +91,7 @@ enddate <- '1984/01/01'
 
 
 #---------------------------End of Settable Options--------------------------------
-#        Click "Source" at the top left of this screen to run the code            #
+#        Click "Source" at the top left of this screen to run the code          #
 ###################################################################################
 ###################################################################################
 ###################################################################################
