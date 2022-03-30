@@ -708,3 +708,6 @@ write.table(taxon_table, paste(outputfoldername,"/ncbi_taxonomy.tsv", sep = ""),
 
 # system(paste("python3 CCfiles/build_term_tables.py ", outputfoldername, "/", sep = ""))
 system(paste("cp C2M2_datapackage.json ", outputfoldername, sep = "" ))
+
+
+head(gene_table)
