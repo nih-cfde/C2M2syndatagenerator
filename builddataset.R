@@ -33,8 +33,8 @@ fileprefix <- 'rmh-'
 ### be sure to add or subtract entire pairs at once
 
 namespace <- c("tag:raynamharris.com,2022-03-28:"="the best namespace") #currently only a single namespace is supported
-mainproject <- c("2022mar23"="the main project")
-projects <- c("breasttest"="a project with breat tissue foo")
+mainproject <- c("2022mar30"="the main project")
+projects <- c("rmhtest"="rayna test project")
 dcc <- c("raynamharris"="test1") # name=description
 
 ## Point values: change to any other point value to increase/decrease size of data
@@ -58,7 +58,7 @@ genes <- 5000  #max is 5000
 phenotypes <- 7 #max is 5000
 proteins <- 50
 species <- 1
-subjectgranularitys <- 0 #must be a number between 0-6
+subjectgranularitys <- 1 #must be a number between 0-6
 subjectroles <- 1 # must be a number between 0-8
 substances <- 500  #max is 5000
 
