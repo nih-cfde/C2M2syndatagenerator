@@ -56,7 +56,7 @@ diseases <- 4
 fileformats <- 3 + 2
 genes <- 5000  #max is 5000
 phenotypes <- 7 #max is 5000
-proteins <- 5000
+proteins <- 50
 species <- 1
 subjectgranularitys <- 0 #must be a number between 0-6
 subjectroles <- 1 # must be a number between 0-8
