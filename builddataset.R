@@ -8,11 +8,12 @@
 
 ## To make a given package easily identifiable when browsing the portal be sure to change these 5 options for each run:
 
-filenameprefix <- 'kenfs'    
-biosampleprefix <- 'jklh-'
-subjectprefix <- 'octo-'
-collections <- c("arbitraryone"="a collection of files with a randomly chosen format", "arbitrarytwo"="a collection of things with a randomly chosen datatype")
-outputfoldername <- "newnovelvocabulary"
+filenameprefix <- 'rmhfile-'    
+biosampleprefix <- 'rmhbios-'
+subjectprefix <- 'rmhsubj-'
+collections <- c("arbitraryone"="a collection of files with a randomly chosen format", 
+                 "arbitrarytwo"="a collection of things with a randomly chosen datatype")
+outputfoldername <- "rmhvocabulary"
 
 # collections uses comma separated keypairs: "title"="description" 
 ### be sure to add or subtract entire pairs at once
@@ -21,70 +22,71 @@ outputfoldername <- "newnovelvocabulary"
 ### Every settable option must have at least one value
 
 c2m2id <- "cfde_registry_dcc:test1" # must be a valid ID starting with `cfde_registry_dcc:`, currently: "test1", "hmp", "gtex", "motrpac", "kidsfirst", "metabolomics", "lincs", "4dn", "idg", "exrna", "sparc", "test2"
-dccabbrev <- "procca"
-website <- "http://acharbonneau.github.io/"
-email <- "achar@ucdavis.edu"
-submitter <- "Amanda Charbonneau"
-fileprefix <- 'asdf-'
+dccabbrev <- "raynamharris"
+website <- "https://www.raynamharris.com/"
+email <- "rmharris@ucdavis.edu"
+submitter <- "Rayna Harris"
+fileprefix <- 'rmh-'
 
 ## Arrays: add/subtract values from lists to change complexity of data
 ### Arrays must be key value pairs: "title"="description"
 ### be sure to add or subtract entire pairs at once
 
-namespace <- c("tag:procrastinomics.com,2021-07-23:"="the best namespace") #currently only a single namespace is supported
-mainproject <- c("queso"="the main project")
-projects <- c("taco"="a project with a hard shell", "burrito"="a rolled project", "nachos"="a spread out project")
-dcc <- c("procrastinomics"="the best dcc") # name=description
+namespace <- c("tag:raynamharris.com,2022-03-28:"="the best namespace") #currently only a single namespace is supported
+mainproject <- c("2022mar23"="the main project")
+projects <- c("breasttest"="a project with breat tissue foo")
+dcc <- c("raynamharris"="test1") # name=description
 
 ## Point values: change to any other point value to increase/decrease size of data
 ### Number of files in file table
-numfile <- 1537
+numfile <- 1100
 ### Number of biosamples in biosample table
-numbio <- 63
+numbio <- 1000
 ### Number of subjects in subject table
-numsub <- 5
+numsub <- 100
 ### Maximum number of controlled vocabulary terms to include
-anatomys <- 33
-assays <- 9
-analyses <- 4
+anatomys <- 3
+assays <- 3
+analyses <- 3
 bioassays <- 3
 compressionformats <- c("format:3987", "format:3615")
 datatypes <- 5
 dbgap_permissions <- 3
-diseases <- 8
-fileformats <- 4
-genes <- 34  #max is 5000
+diseases <- 4
+fileformats <- 3 + 2
+genes <- 5000  #max is 5000
 phenotypes <- 7 #max is 5000
-proteins <- 4
-species <- 2
-subjectgranularitys <- 2 #must be a number between 0-6
+proteins <- 5000
+species <- 1
+subjectgranularitys <- 0 #must be a number between 0-6
 subjectroles <- 1 # must be a number between 0-8
-substances <- 10  #max is 5000
+substances <- 500  #max is 5000
 
 ## Do you want to include demographic data?
-subjectethnicity <- "yes"  #"yes" or "no"
-subjectrace <-  "yes"  #"yes" or "no"
+subjectethnicity <- "no"  #"yes" or "no"
+subjectrace <-  "no"  #"yes" or "no"
 subjectsex <-  "yes"  #"yes" or "no"
 ### Ages of subjects 
-averageage <- 30  # number or NA to not include age
-standarddev <- 30 # number or NA to not include age
+averageage <- 38  # number or NA to not include age
+standarddev <- 10 # number or NA to not include age
 
-## How randomized should metadata be on a scale from 1-100? 1= fewest possible combinations, 100= every unique combination
+## How randomized should metadata be on a scale from 1-100? 
+# 1= fewest possible combinations, 100= every unique combination
 metadata_random <- 10
 ### Should the metadata appear roughly equally? (yes/no)
 metadata_even <- "yes"
 
 ## Allow for missing non-required metadata values as a percentage of total values
-### 15 = 15% missingness. Must be value between 0 and 100
-### filesmissing, biosamplesmissing, and subjectsmissing create missingness in those tables.
+### 15 = 15% missingenes. Must be value between 0 and 100
+### filesmissing, biosamplesmissing, and subjectsmissing create missingenes in those tables.
 ### associationsmissing creates missingness in association tables and collection associations
 filesmissing <- 10
 biosamplesmissing <- 12
 subjectsmissing <- 5
 associationsmissing <- 20 
 ### Date range. For generating creation dates
-startdate <- '1999/01/01'
-enddate <- '2000/01/01'
+startdate <- '1983/01/01'
+enddate <- '1984/01/01'
 
 
 #---------------------------End of Settable Options--------------------------------
