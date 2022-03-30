@@ -640,18 +640,18 @@ write.table(subject_substance_tsv, paste(outputfoldername, "/subject_substance.t
 write.table(subject_tsv, paste(outputfoldername,"/subject.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
 
 ## temp make my own CV tables
-write.table(anatomy_table, paste(outputfoldername,"/anatomy.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
-write.table(analysistype_table, paste(outputfoldername,"/analysis_type.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
-write.table(rbind(assaytype_table, bioassaytype_table), paste(outputfoldername,"/assay_type.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
-write.table(compound_table, paste(outputfoldername,"/compound.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
-write.table(datatype_table, paste(outputfoldername,"/data_type.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
-write.table(disease_table, paste(outputfoldername,"/disease.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
-write.table(fileformat_table, paste(outputfoldername,"/file_format.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
-write.table(gene_table, paste(outputfoldername,"/gene.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
-write.table(phenotype_table, paste(outputfoldername,"/phenotype.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
-write.table(protein_table, paste(outputfoldername,"/protein.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
-write.table(substance_table, paste(outputfoldername,"/substance.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
-write.table(taxon_table, paste(outputfoldername,"/ncbi_taxonomy.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
+substance_table %>% unique() %>% droplevels() %>% write.table(anatomy_table, paste(outputfoldername,"/anatomy.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
+substance_table %>% unique() %>% droplevels() %>% write.table(analysistype_table, paste(outputfoldername,"/analysis_type.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
+substance_table %>% unique() %>% droplevels() %>% write.table(rbind(assaytype_table, bioassaytype_table), paste(outputfoldername,"/assay_type.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
+substance_table %>% unique() %>% droplevels() %>% write.table(compound_table, paste(outputfoldername,"/compound.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
+substance_table %>% unique() %>% droplevels() %>% write.table(datatype_table, paste(outputfoldername,"/data_type.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
+substance_table %>% unique() %>% droplevels() %>% write.table(disease_table, paste(outputfoldername,"/disease.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
+substance_table %>% unique() %>% droplevels() %>% write.table(fileformat_table, paste(outputfoldername,"/file_format.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
+substance_table %>% unique() %>% droplevels() %>% write.table(gene_table, paste(outputfoldername,"/gene.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
+substance_table %>% unique() %>% droplevels() %>% write.table(phenotype_table, paste(outputfoldername,"/phenotype.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
+substance_table %>% unique() %>% droplevels() %>% write.table(protein_table, paste(outputfoldername,"/protein.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
+substance_table %>% unique() %>% droplevels() %>% write.table( paste(outputfoldername,"/substance.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
+substance_table %>% unique() %>% droplevels() %>% write.table(taxon_table, paste(outputfoldername,"/ncbi_taxonomy.tsv", sep = ""), sep ="\t", row.names = F, col.names = T, quote = F, na = "")
 
 
 
