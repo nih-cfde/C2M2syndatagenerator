@@ -8,11 +8,11 @@
 
 ## To make a given package easily identifiable when browsing the portal be sure to change these 5 options for each run:
 
-filenameprefix <- 'kenfs'    
-biosampleprefix <- 'jklh-'
-subjectprefix <- 'octo-'
-collections <- c("arbitraryone"="a collection of files with a randomly chosen format", "arbitrarytwo"="a collection of things with a randomly chosen datatype")
-outputfoldername <- "newnovelvocabulary"
+filenameprefix <- 'dpgapfiles'    
+biosampleprefix <- 'biosampleho-'
+subjectprefix <- 'manysubject-'
+collections <- c("muchwow"="a collection of files with a randomly chosen format", "doge"="a collection of things with a randomly chosen datatype")
+outputfoldername <- "nowwithdbgap"
 
 # collections uses comma separated keypairs: "title"="description" 
 ### be sure to add or subtract entire pairs at once
@@ -47,7 +47,7 @@ numsub <- 5
 anatomys <- 33
 assays <- 9
 analyses <- 4
-bioassays <- 3
+bioassays <- 4
 compressionformats <- c("format:3987", "format:3615")
 datatypes <- 5
 dbgap_permissions <- 3
@@ -58,7 +58,7 @@ phenotypes <- 7 #max is 5000
 proteins <- 4
 species <- 2
 subjectgranularitys <- 2 #must be a number between 0-6
-subjectroles <- 1 # must be a number between 0-8
+subjectroles <- 2 # must be a number between 0-8
 substances <- 10  #max is 5000
 
 ## Do you want to include demographic data?
@@ -81,7 +81,7 @@ metadata_even <- "yes"
 filesmissing <- 10
 biosamplesmissing <- 12
 subjectsmissing <- 5
-associationsmissing <- 20 
+associationsmissing <- 0 
 ### Date range. For generating creation dates
 startdate <- '1999/01/01'
 enddate <- '2000/01/01'
@@ -176,7 +176,7 @@ colnames(file_tsv) <- c("id_namespace", "local_id", "project_id_namespace",
                          "size_in_bytes", "uncompressed_size_in_bytes", 
                          "sha256", "md5", "filename", "file_format", "compression_format",
                          "data_type","assay_type", "analysis_type", "mime_type", "bundle_collection_id_namespace",
-                         "bundle_collection_local_id", "ras_permissions")
+                         "bundle_collection_local_id", "dbgap_study_id")
 file_tsv$id_namespace <- names(namespace)
 file_tsv$local_id <- paste(fileprefix, stri_rand_strings(numfile, 3, pattern = "[0-9]"), str_pad(c(1:numfile),6, pad="0"), sep="")
 file_tsv$project_id_namespace <- names(namespace)
@@ -191,7 +191,7 @@ file_tsv$mime_type <- NA
 file_tsv$bundle_collection_id_namespace <- NA
 file_tsv$bundle_collection_local_id <- NA
 file_tsv$compression_format <- sample(compressionformats, size = numfile, replace = T)
-file_tsv$ras_permissions <- sample(ras_table, size = numfile, replace = T)
+file_tsv$dbgap_study_id <- sample(ras_table, size = numfile, replace = T)
 file_tsv$uncompressed_size_in_bytes <- file_tsv$size_in_bytes + abs(sample(.Random.seed, size = numfile, replace = T))
 
 
@@ -204,7 +204,7 @@ if (filesmissing > 0) {
   file_tsv$data_type[c(sample(1:numfile, remove, replace = F))] <- NA
   file_tsv$assay_type[c(sample(1:numfile, remove, replace = F))] <- NA
   file_tsv$analysis_type[c(sample(1:numfile, remove, replace = F))] <- NA
-  file_tsv$ras_permissions[c(sample(1:numfile, remove, replace = F))] <- NA
+  file_tsv$dbgap_study_id[c(sample(1:numfile, remove, replace = F))] <- NA
   file_tsv$compression_format[c(sample(1:numfile, remove, replace = F))] <- NA
   file_tsv$uncompressed_size_in_bytes[is.na(file_tsv$compression_format) == T] <- NA
 }
