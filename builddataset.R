@@ -8,11 +8,12 @@
 
 ## To make a given package easily identifiable when browsing the portal be sure to change these 5 options for each run:
 
-filenameprefix <- 'dpgapfiles'    
-biosampleprefix <- 'biosampleho-'
-subjectprefix <- 'manysubject-'
-collections <- c("muchwow"="a collection of files with a randomly chosen format", "doge"="a collection of things with a randomly chosen datatype")
-outputfoldername <- "nowwithdbgap"
+filenameprefix <- 'testfiles'    
+biosampleprefix <- 'testbiosamples-'
+subjectprefix <- 'testsubjects-'
+collections <- c("testcollection1"="a collection of files with a randomly chosen format", 
+                 "testcollection12"="a collection of things with a randomly chosen datatype")
+outputfoldername <- "test_2022_04_26"
 
 # collections uses comma separated keypairs: "title"="description" 
 ### be sure to add or subtract entire pairs at once
@@ -21,20 +22,20 @@ outputfoldername <- "nowwithdbgap"
 ### Every settable option must have at least one value
 
 c2m2id <- "cfde_registry_dcc:test1" # must be a valid ID starting with `cfde_registry_dcc:`, currently: "test1", "hmp", "gtex", "motrpac", "kidsfirst", "metabolomics", "lincs", "4dn", "idg", "exrna", "sparc", "test2"
-dccabbrev <- "procca"
-website <- "http://acharbonneau.github.io/"
-email <- "achar@ucdavis.edu"
-submitter <- "Amanda Charbonneau"
-fileprefix <- 'asdf-'
+dccabbrev <- "test1"
+website <- "https://training.nih-cfde.org/"
+email <- "training@cfde.atlassian.net"
+submitter <- "Rana Harris"
+fileprefix <- 'test-'
 
 ## Arrays: add/subtract values from lists to change complexity of data
 ### Arrays must be key value pairs: "title"="description"
 ### be sure to add or subtract entire pairs at once
 
-namespace <- c("tag:procrastinomics.com,2021-07-23:"="the best namespace") #currently only a single namespace is supported
-mainproject <- c("queso"="the main project")
-projects <- c("taco"="a project with a hard shell", "burrito"="a rolled project", "nachos"="a spread out project")
-dcc <- c("procrastinomics"="the best dcc") # name=description
+namespace <- c("tag:training.nih-cfde.org,2022-04-26:"="training") #currently only a single namespace is supported
+mainproject <- c("test1"="the main project")
+projects <- c("test2"="another project", "test3"="a third project", "test4"="a fourth project")
+dcc <- c("test1"="testing") # name=description
 
 ## Point values: change to any other point value to increase/decrease size of data
 ### Number of files in file table
