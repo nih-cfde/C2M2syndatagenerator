@@ -13,7 +13,7 @@ biosampleprefix <- 'testbiosamples-'
 subjectprefix <- 'testsubjects-'
 collections <- c("testcollection1"="a collection of files with a randomly chosen format", 
                  "testcollection12"="a collection of things with a randomly chosen datatype")
-outputfoldername <- "test_2022_04_26"
+outputfoldername <- "test_2022_04_29"
 
 # collections uses comma separated keypairs: "title"="description" 
 ### be sure to add or subtract entire pairs at once
@@ -32,21 +32,21 @@ fileprefix <- 'test-'
 ### Arrays must be key value pairs: "title"="description"
 ### be sure to add or subtract entire pairs at once
 
-namespace <- c("tag:training.nih-cfde.org,2022-04-26:"="training") #currently only a single namespace is supported
+namespace <- c("tag:training.nih-cfde.org,2022-04-29:"="training") #currently only a single namespace is supported
 mainproject <- c("test1"="the main project")
 projects <- c("test2"="another project", "test3"="a third project", "test4"="a fourth project")
 dcc <- c("test1"="testing") # name=description
 
 ## Point values: change to any other point value to increase/decrease size of data
 ### Number of files in file table
-numfile <- 1537
+numfile <- 100
 ### Number of biosamples in biosample table
-numbio <- 63
+numbio <- 50
 ### Number of subjects in subject table
 numsub <- 5
 ### Maximum number of controlled vocabulary terms to include
-anatomys <- 33
-assays <- 9
+anatomys <- 35
+assays <- 5
 analyses <- 4
 bioassays <- 4
 compressionformats <- c("format:3987", "format:3615")
@@ -658,8 +658,3 @@ taxon_table %>% unique() %>% droplevels() %>% write.table( paste(outputfoldernam
 
 # system(paste("python3 CCfiles/build_term_tables.py ", outputfoldername, "/", sep = ""))
 system(paste("cp C2M2_datapackage.json ", outputfoldername, sep = "" ))
-
-
-
-
-
