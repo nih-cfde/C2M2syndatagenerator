@@ -8,11 +8,11 @@
 
 ## To make a given package easily identifiable when browsing the portal be sure to change these 5 options for each run:
 
-filenameprefix <- 'dpgapfiles'    
-biosampleprefix <- 'biosampleho-'
-subjectprefix <- 'manysubject-'
-collections <- c("muchwow"="a collection of files with a randomly chosen format", "doge"="a collection of things with a randomly chosen datatype")
-outputfoldername <- "nowwithdbgap"
+filenameprefix <- 'f'    
+biosampleprefix <- 'b-'
+subjectprefix <- 's-'
+collections <- c("col1"="a collection of files with a randomly chosen format", "col2"="a collection of things with a randomly chosen datatype")
+outputfoldername <- "2022-07-06"
 
 # collections uses comma separated keypairs: "title"="description" 
 ### be sure to add or subtract entire pairs at once
@@ -21,45 +21,45 @@ outputfoldername <- "nowwithdbgap"
 ### Every settable option must have at least one value
 
 c2m2id <- "cfde_registry_dcc:test1" # must be a valid ID starting with `cfde_registry_dcc:`, currently: "test1", "hmp", "gtex", "motrpac", "kidsfirst", "metabolomics", "lincs", "4dn", "idg", "exrna", "sparc", "test2"
-dccabbrev <- "procca"
-website <- "http://acharbonneau.github.io/"
-email <- "achar@ucdavis.edu"
-submitter <- "Amanda Charbonneau"
-fileprefix <- 'asdf-'
+dccabbrev <- "test"
+website <- "https://www.raynamharris.com/"
+email <- "rmharris@ucdavis.edu"
+submitter <- "Rayna Harris"
+fileprefix <- '2022-07-06-'
 
 ## Arrays: add/subtract values from lists to change complexity of data
 ### Arrays must be key value pairs: "title"="description"
 ### be sure to add or subtract entire pairs at once
 
-namespace <- c("tag:procrastinomics.com,2021-07-23:"="the best namespace") #currently only a single namespace is supported
-mainproject <- c("queso"="the main project")
+namespace <- c("testing"="the testing namespace") #currently only a single namespace is supported
+mainproject <- c("test1"="the main project")
 projects <- c("taco"="a project with a hard shell", "burrito"="a rolled project", "nachos"="a spread out project")
-dcc <- c("procrastinomics"="the best dcc") # name=description
+dcc <- c("test"="the testing dcc") # name=description
 
 ## Point values: change to any other point value to increase/decrease size of data
 ### Number of files in file table
-numfile <- 1537
+numfile <- 500
 ### Number of biosamples in biosample table
-numbio <- 63
+numbio <- 50
 ### Number of subjects in subject table
 numsub <- 5
 ### Maximum number of controlled vocabulary terms to include
-anatomys <- 33
-assays <- 9
-analyses <- 4
-bioassays <- 4
+anatomys <- 1
+assays <- 10
+analyses <- 10
+bioassays <- 10
 compressionformats <- c("format:3987", "format:3615")
-datatypes <- 5
+datatypes <- 1
 dbgap_permissions <- 3
 diseases <- 8
-fileformats <- 4
+fileformats <- 1
 genes <- 34  #max is 5000
 phenotypes <- 7 #max is 5000
 proteins <- 4
 species <- 2
 subjectgranularitys <- 2 #must be a number between 0-6
 subjectroles <- 2 # must be a number between 0-8
-substances <- 10  #max is 5000
+substances <- 0  #max is 5000
 
 ## Do you want to include demographic data?
 subjectethnicity <- "yes"  #"yes" or "no"
@@ -70,7 +70,7 @@ averageage <- 30  # number or NA to not include age
 standarddev <- 30 # number or NA to not include age
 
 ## How randomized should metadata be on a scale from 1-100? 1= fewest possible combinations, 100= every unique combination
-metadata_random <- 10
+metadata_random <- 90
 ### Should the metadata appear roughly equally? (yes/no)
 metadata_even <- "yes"
 
@@ -79,9 +79,9 @@ metadata_even <- "yes"
 ### filesmissing, biosamplesmissing, and subjectsmissing create missingness in those tables.
 ### associationsmissing creates missingness in association tables and collection associations
 filesmissing <- 10
-biosamplesmissing <- 12
-subjectsmissing <- 5
-associationsmissing <- 0 
+biosamplesmissing <- 10
+subjectsmissing <- 10
+associationsmissing <- 10 
 ### Date range. For generating creation dates
 startdate <- '1999/01/01'
 enddate <- '2000/01/01'
@@ -142,7 +142,7 @@ metadatasets$file <- fileformat_table$id
 metadatasets$granularity <- granularity_table$id
 metadatasets$project <- names(projects)
 metadatasets$role  <- role_table$id
-metadatasets <- metadatasets[sample(c(1:multiplier), size = 1 + round(multiplier*(metadata_random/100), digits = 0), replace = F),]
+metadatasets <- metadatasets[sample(c(1:multiplier), size = 1 + round(multiplier*(metadata_random/100), digits = 0), replace = T),]
 if (metadata_even == 'no') {
   metadatasets <- metadatasets[sample(1:nrow(metadatasets), size = nrow(metadatasets), replace = T),]
 }
@@ -352,8 +352,8 @@ colnames(subject_substance_tsv) <- c( "subject_id_namespace", "subject_local_id"
                                         "substance")
 
 subject_substance_tsv$subject_id_namespace <- names(namespace)
-subject_substance_tsv$subject_local_id <- sample(subject_tsv$local_id, replace = F, size = numsub)
-subject_substance_tsv$substance <- sample(substance_table$id, numsub, replace = T)
+subject_substance_tsv$subject_local_id <- sample(subject_tsv$local_id, replace = T, size = numsub)
+#subject_substance_tsv$substance <- sample(substance_table$id, numsub, replace = F)
 subject_substance_tsv$substance <- sample(substanceweights[,2], size = numsub, replace = T, prob = substanceweights[,1])
 subject_substance_tsv <- filter(subject_substance_tsv, !is.na(substance)) %>% unique() %>% droplevels()
 
@@ -379,7 +379,7 @@ colnames(biosample_substance_tsv) <- c( "biosample_id_namespace", "biosample_loc
                                  "substance")
 biosample_substance_tsv$biosample_id_namespace <- names(namespace)
 biosample_substance_tsv$biosample_local_id <- sample(biosample_tsv$local_id, replace = F, size = numbio)
-biosample_substance_tsv$substance <- sample(substance_table$id, numbio, replace = T)
+#biosample_substance_tsv$substance <- sample(substance_table$id, numbio, replace = T)
 biosample_substance_tsv$substance <- sample(substanceweights[,2], size = numbio, replace = T, prob = substanceweights[,1])
 biosample_substance_tsv <- filter(biosample_substance_tsv, !is.na(substance)) %>% unique() %>% droplevels()
 
