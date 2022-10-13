@@ -8,11 +8,11 @@
 
 ## To make a given package easily identifiable when browsing the portal be sure to change these 5 options for each run:
 
-filenameprefix <- 'dpgapfiles'    
-biosampleprefix <- 'biosampleho-'
-subjectprefix <- 'manysubject-'
-collections <- c("muchwow"="a collection of files with a randomly chosen format", "doge"="a collection of things with a randomly chosen datatype")
-outputfoldername <- "nowwithdbgap"
+filenameprefix <- 'test-files'    
+biosampleprefix <- 'test-biosamp'
+subjectprefix <- 'test-subject'
+collections <- c("oct"="october collection", "sep"="september collection")
+outputfoldername <- "test_2022_10_13"
 
 # collections uses comma separated keypairs: "title"="description" 
 ### be sure to add or subtract entire pairs at once
@@ -21,41 +21,41 @@ outputfoldername <- "nowwithdbgap"
 ### Every settable option must have at least one value
 
 c2m2id <- "cfde_registry_dcc:test1" # must be a valid ID starting with `cfde_registry_dcc:`, currently: "test1", "hmp", "gtex", "motrpac", "kidsfirst", "metabolomics", "lincs", "4dn", "idg", "exrna", "sparc", "test2"
-dccabbrev <- "procca"
-website <- "http://acharbonneau.github.io/"
-email <- "achar@ucdavis.edu"
-submitter <- "Amanda Charbonneau"
-fileprefix <- 'asdf-'
+dccabbrev <- "test"
+website <- "https://www.raynamharris.com/"
+email <- "rmharris@ucdavis.edu"
+submitter <- "Rayna Harris"
+fileprefix <- 'rmh'
 
 ## Arrays: add/subtract values from lists to change complexity of data
 ### Arrays must be key value pairs: "title"="description"
 ### be sure to add or subtract entire pairs at once
 
-namespace <- c("tag:procrastinomics.com,2021-07-23:"="the best namespace") #currently only a single namespace is supported
+namespace <- c("tag:raynamharris.com,2022-10-13:"="test namespace") #currently only a single namespace is supported
 mainproject <- c("queso"="the main project")
 projects <- c("taco"="a project with a hard shell", "burrito"="a rolled project", "nachos"="a spread out project")
-dcc <- c("procrastinomics"="the best dcc") # name=description
+dcc <- c("test"="testing dcc") # name=description
 
 ## Point values: change to any other point value to increase/decrease size of data
 ### Number of files in file table
-numfile <- 1537
+numfile <- 2000
 ### Number of biosamples in biosample table
-numbio <- 63
+numbio <- 10
 ### Number of subjects in subject table
-numsub <- 5
+numsub <- 10
 ### Maximum number of controlled vocabulary terms to include
-anatomys <- 33
-assays <- 9
-analyses <- 4
-bioassays <- 4
+anatomys <- 10
+assays <- 5
+analyses <- 5
+bioassays <- 5
 compressionformats <- c("format:3987", "format:3615")
 datatypes <- 5
 dbgap_permissions <- 3
-diseases <- 8
+diseases <- 5
 fileformats <- 4
-genes <- 34  #max is 5000
-phenotypes <- 7 #max is 5000
-proteins <- 4
+genes <- 50  #max is 5000
+phenotypes <- 5 #max is 5000
+proteins <- 5
 species <- 2
 subjectgranularitys <- 2 #must be a number between 0-6
 subjectroles <- 2 # must be a number between 0-8
