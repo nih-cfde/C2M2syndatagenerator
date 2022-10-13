@@ -8,11 +8,11 @@
 
 ## To make a given package easily identifiable when browsing the portal be sure to change these 5 options for each run:
 
-filenameprefix <- 'test-files'    
-biosampleprefix <- 'test-biosamp'
-subjectprefix <- 'test-subject'
-collections <- c("oct"="october collection", "sep"="september collection")
-outputfoldername <- "test_2022_10_13"
+filenameprefix <- 'dpgapfiles'    
+biosampleprefix <- 'biosampleho-'
+subjectprefix <- 'manysubject-'
+collections <- c("muchwow"="a collection of files with a randomly chosen format", "doge"="a collection of things with a randomly chosen datatype")
+outputfoldername <- "test_2022_10_13_5"
 
 # collections uses comma separated keypairs: "title"="description" 
 ### be sure to add or subtract entire pairs at once
@@ -21,44 +21,44 @@ outputfoldername <- "test_2022_10_13"
 ### Every settable option must have at least one value
 
 c2m2id <- "cfde_registry_dcc:test1" # must be a valid ID starting with `cfde_registry_dcc:`, currently: "test1", "hmp", "gtex", "motrpac", "kidsfirst", "metabolomics", "lincs", "4dn", "idg", "exrna", "sparc", "test2"
-dccabbrev <- "test"
-website <- "https://www.raynamharris.com/"
+dccabbrev <- "procca"
+website <- "raynamharris.com"
 email <- "rmharris@ucdavis.edu"
 submitter <- "Rayna Harris"
-fileprefix <- 'rmh'
+fileprefix <- 'asdf-'
 
 ## Arrays: add/subtract values from lists to change complexity of data
 ### Arrays must be key value pairs: "title"="description"
 ### be sure to add or subtract entire pairs at once
 
-namespace <- c("tag:raynamharris.com,2022-10-13:"="test namespace") #currently only a single namespace is supported
+namespace <- c("tag:raynamharris.com,2022-10-13:"="the best namespace") #currently only a single namespace is supported
 mainproject <- c("queso"="the main project")
 projects <- c("taco"="a project with a hard shell", "burrito"="a rolled project", "nachos"="a spread out project")
-dcc <- c("test"="testing dcc") # name=description
+dcc <- c("procrastinomics"="the best dcc") # name=description
 
 ## Point values: change to any other point value to increase/decrease size of data
 ### Number of files in file table
-numfile <- 2000
+numfile <- 1537
 ### Number of biosamples in biosample table
-numbio <- 10
+numbio <- 63
 ### Number of subjects in subject table
-numsub <- 10
+numsub <- 5
 ### Maximum number of controlled vocabulary terms to include
-anatomys <- 10
-assays <- 5
-analyses <- 5
-bioassays <- 5
+anatomys <- 33
+assays <- 9
+analyses <- 4
+bioassays <- 4
 compressionformats <- c("format:3987", "format:3615")
 datatypes <- 5
 dbgap_permissions <- 3
-diseases <- 5
+diseases <- 8
 fileformats <- 4
-genes <- 50  #max is 5000
-phenotypes <- 5 #max is 5000
-proteins <- 5
+genes <- 34  #max is 5000
+phenotypes <- 7 #max is 5000
+proteins <- 4
 species <- 2
 subjectgranularitys <- 2 #must be a number between 0-6
-subjectroles <- 2 # must be a number between 0-8
+subjectroles <- 1 # must be a number between 0-8
 substances <- 10  #max is 5000
 
 ## Do you want to include demographic data?
@@ -122,7 +122,7 @@ ras_table <- paste("ras:phs", sample(10:1000000, dbgap_permissions), sep="")
 role_table <- sample_n(fread("CVtables/subject_role.tsv", sep = "\t"), subjectroles, replace = T) %>% unique() %>% droplevels()
 subjectethnicity_table <- fread("CVtables/subject_ethnicity.tsv", sep = "\t")
 subjectrace_table <- fread("CVtables/subject_race.tsv", sep = "\t")
-subjectsex_table <- fread("CVtables/subject_sex.tsv", sep = "\t")
+subjectsex_table <- fread("CVtables/subject_sex.tsv", sep = "\t", nrows = 4) 
 taxon_table <- sample_n(fread("CVtables/ncbi_taxonomy_tiny.tsv", sep= "\t"), species, replace = T)
 taxon_table <- rbind(taxon_table, filter(fread("CVtables/ncbi_taxonomy_tiny.tsv", sep= "\t"), id %in% gene_table$organism | id %in% protein_table$organism)) %>% unique() %>% droplevels()
 substance_table <-sample_n(fread("CVtables/substance.records_for_first_5000_CIDs.max_100_synonyms_per_term.tsv", sep = "\t"), substances, replace = T) %>% unique() %>% droplevels()
@@ -240,7 +240,7 @@ subject_tsv$persistent_id <- ""
 subject_tsv$creation_time <- sample(seq(as.Date(startdate), as.Date(enddate), by="day"), numsub, replace = T)
 subject_tsv$granularity <- sample(metadatasets$granularity, numsub, replace = T)
 if (subjectsex == 'yes') {
-  subject_tsv$sex <- sample(c(NA, subjectsex_table$id), numsub, replace = T, prob = c(associationsmissing, 10, 50, 50, 10, 10, 10))
+  subject_tsv$sex <- sample(c(NA, subjectsex_table$id), numsub, replace = T, prob = c(associationsmissing, 10, 50, 50, 10))
 }
 if (subjectethnicity == 'yes') {
   subject_tsv$ethnicity <- sample(c(NA, subjectethnicity_table$id), numsub, replace = T, prob = c(associationsmissing, 50, 50))
