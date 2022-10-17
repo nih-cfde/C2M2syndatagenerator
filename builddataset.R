@@ -8,11 +8,11 @@
 
 ## To make a given package easily identifiable when browsing the portal be sure to change these 5 options for each run:
 
-filenameprefix <- 'dpgapfiles'    
-biosampleprefix <- 'biosampleho-'
+filenameprefix <- 'newfieldname'    
+biosampleprefix <- 'biosample-'
 subjectprefix <- 'manysubject-'
 collections <- c("muchwow"="a collection of files with a randomly chosen format", "doge"="a collection of things with a randomly chosen datatype")
-outputfoldername <- "test_2022_10_13_5"
+outputfoldername <- "test_2022_10_17"
 
 # collections uses comma separated keypairs: "title"="description" 
 ### be sure to add or subtract entire pairs at once
@@ -31,18 +31,18 @@ fileprefix <- 'asdf-'
 ### Arrays must be key value pairs: "title"="description"
 ### be sure to add or subtract entire pairs at once
 
-namespace <- c("tag:raynamharris.com,2022-10-13:"="the best namespace") #currently only a single namespace is supported
+namespace <- c("tag:raynamharris.com,2022-10-17:"="the best namespace") #currently only a single namespace is supported
 mainproject <- c("queso"="the main project")
 projects <- c("taco"="a project with a hard shell", "burrito"="a rolled project", "nachos"="a spread out project")
 dcc <- c("procrastinomics"="the best dcc") # name=description
 
 ## Point values: change to any other point value to increase/decrease size of data
 ### Number of files in file table
-numfile <- 1537
+numfile <- 2000
 ### Number of biosamples in biosample table
-numbio <- 63
+numbio <- 60
 ### Number of subjects in subject table
-numsub <- 5
+numsub <- 6
 ### Maximum number of controlled vocabulary terms to include
 anatomys <- 33
 assays <- 9
@@ -58,7 +58,7 @@ phenotypes <- 7 #max is 5000
 proteins <- 4
 species <- 2
 subjectgranularitys <- 2 #must be a number between 0-6
-subjectroles <- 1 # must be a number between 0-8
+subjectroles <- 2 # must be a number between 0-8
 substances <- 10  #max is 5000
 
 ## Do you want to include demographic data?
@@ -122,7 +122,7 @@ ras_table <- paste("ras:phs", sample(10:1000000, dbgap_permissions), sep="")
 role_table <- sample_n(fread("CVtables/subject_role.tsv", sep = "\t"), subjectroles, replace = T) %>% unique() %>% droplevels()
 subjectethnicity_table <- fread("CVtables/subject_ethnicity.tsv", sep = "\t")
 subjectrace_table <- fread("CVtables/subject_race.tsv", sep = "\t")
-subjectsex_table <- fread("CVtables/subject_sex.tsv", sep = "\t", nrows = 4) 
+subjectsex_table <- fread("CVtables/subject_sex.tsv", sep = "\t")
 taxon_table <- sample_n(fread("CVtables/ncbi_taxonomy_tiny.tsv", sep= "\t"), species, replace = T)
 taxon_table <- rbind(taxon_table, filter(fread("CVtables/ncbi_taxonomy_tiny.tsv", sep= "\t"), id %in% gene_table$organism | id %in% protein_table$organism)) %>% unique() %>% droplevels()
 substance_table <-sample_n(fread("CVtables/substance.records_for_first_5000_CIDs.max_100_synonyms_per_term.tsv", sep = "\t"), substances, replace = T) %>% unique() %>% droplevels()
@@ -213,7 +213,7 @@ if (filesmissing > 0) {
 biosample_tsv <- data.frame(matrix(nrow=numbio, ncol = 8))
 colnames(biosample_tsv) <- c("id_namespace", "local_id", "project_id_namespace", 
                               "project_local_id", "persistent_id", "creation_time",
-                              "assay_type", "anatomy")
+                              "sample_prep_method", "anatomy")
 biosample_tsv$id_namespace <- names(namespace)
 biosample_tsv$local_id <- paste(biosampleprefix, stri_rand_strings(numbio, 3, pattern = "[0-9]"), str_pad(c(1:numbio),6, pad="0"), sep="")
 biosample_tsv$project_id_namespace <- names(namespace)
@@ -223,7 +223,7 @@ biosample_tsv[,c(4, 7, 8)] <- metadatasets[sample(1:nrow(metadatasets), numbio, 
 if (biosamplesmissing > 0) {
   remove <- round(numbio*(biosamplesmissing/100))
   biosample_tsv$creation_time[c(sample(1:numbio, remove, replace = T))] <- NA
-  biosample_tsv$assay_type[c(sample(1:numbio, remove, replace = T))] <- NA
+  biosample_tsv$sample_prep_method[c(sample(1:numbio, remove, replace = T))] <- NA
   biosample_tsv$anatomy[c(sample(1:numbio, remove, replace = T))] <- NA
 }  
 
@@ -240,7 +240,7 @@ subject_tsv$persistent_id <- ""
 subject_tsv$creation_time <- sample(seq(as.Date(startdate), as.Date(enddate), by="day"), numsub, replace = T)
 subject_tsv$granularity <- sample(metadatasets$granularity, numsub, replace = T)
 if (subjectsex == 'yes') {
-  subject_tsv$sex <- sample(c(NA, subjectsex_table$id), numsub, replace = T, prob = c(associationsmissing, 10, 50, 50, 10))
+  subject_tsv$sex <- sample(c(NA, subjectsex_table$id), numsub, replace = T, prob = c(associationsmissing, 10, 50, 50, 10, 10, 10))
 }
 if (subjectethnicity == 'yes') {
   subject_tsv$ethnicity <- sample(c(NA, subjectethnicity_table$id), numsub, replace = T, prob = c(associationsmissing, 50, 50))
@@ -657,8 +657,4 @@ taxon_table %>% unique() %>% droplevels() %>% write.table( paste(outputfoldernam
 
 # system(paste("python3 CCfiles/build_term_tables.py ", outputfoldername, "/", sep = ""))
 system(paste("cp C2M2_datapackage.json ", outputfoldername, sep = "" ))
-
-
-
-
 
