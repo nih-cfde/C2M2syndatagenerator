@@ -8,11 +8,11 @@
 
 ## To make a given package easily identifiable when browsing the portal be sure to change these 5 options for each run:
 
-filenameprefix <- 'dpgapfiles'    
-biosampleprefix <- 'biosampleho-'
-subjectprefix <- 'manysubject-'
+filenameprefix <- 'nov17'    
+biosampleprefix <- 'nov17-'
+subjectprefix <- 'nov17-'
 collections <- c("muchwow"="a collection of files with a randomly chosen format", "doge"="a collection of things with a randomly chosen datatype")
-outputfoldername <- "nowwithdbgap"
+outputfoldername <- "test_2022_11_17"
 
 # collections uses comma separated keypairs: "title"="description" 
 ### be sure to add or subtract entire pairs at once
@@ -22,30 +22,30 @@ outputfoldername <- "nowwithdbgap"
 
 c2m2id <- "cfde_registry_dcc:test1" # must be a valid ID starting with `cfde_registry_dcc:`, currently: "test1", "hmp", "gtex", "motrpac", "kidsfirst", "metabolomics", "lincs", "4dn", "idg", "exrna", "sparc", "test2"
 dccabbrev <- "procca"
-website <- "http://acharbonneau.github.io/"
-email <- "achar@ucdavis.edu"
-submitter <- "Amanda Charbonneau"
-fileprefix <- 'asdf-'
+website <- "https://www.raynamharris.com/"
+email <- "rmharris@ucdavis.edu"
+submitter <- "Rayna Harris"
+fileprefix <- 'nov17-'
 
 ## Arrays: add/subtract values from lists to change complexity of data
 ### Arrays must be key value pairs: "title"="description"
 ### be sure to add or subtract entire pairs at once
 
-namespace <- c("tag:procrastinomics.com,2021-07-23:"="the best namespace") #currently only a single namespace is supported
+namespace <- c("tag:raynamharris.com,2022-11-17:"="the best namespace") #currently only a single namespace is supported
 mainproject <- c("queso"="the main project")
 projects <- c("taco"="a project with a hard shell", "burrito"="a rolled project", "nachos"="a spread out project")
 dcc <- c("procrastinomics"="the best dcc") # name=description
 
 ## Point values: change to any other point value to increase/decrease size of data
 ### Number of files in file table
-numfile <- 1537
+numfile <- 1000
 ### Number of biosamples in biosample table
-numbio <- 63
+numbio <- 50
 ### Number of subjects in subject table
 numsub <- 5
 ### Maximum number of controlled vocabulary terms to include
-anatomys <- 33
-assays <- 9
+anatomys <- 10
+assays <- 10
 analyses <- 4
 bioassays <- 4
 compressionformats <- c("format:3987", "format:3615")
@@ -118,7 +118,10 @@ gene_table <- sample_n(fread("CVtables/gene_tiny.tsv", sep = "\t"), genes, repla
 granularity_table <- sample_n(fread("CVtables/subject_granularity.tsv", sep = "\t"), subjectgranularitys, replace = T) %>% unique() %>% droplevels()
 phenotype_table <- sample_n(fread("CVtables/phenotype_tiny.tsv", sep = "\t"), phenotypes, replace = T) %>% unique() %>% droplevels()
 protein_table <- sample_n(fread("CVtables/protein_tiny.tsv", sep = "\t"), proteins, replace = T) %>% unique() %>% droplevels()
-ras_table <- paste("ras:phs", sample(10:1000000, dbgap_permissions), sep="")
+
+ras_list <- c("000228", "001110", "001436", "002162", "001785", "000467")
+ras_table <- paste("phs", sample(ras_list, dbgap_permissions, replace = T), sep="")
+
 role_table <- sample_n(fread("CVtables/subject_role.tsv", sep = "\t"), subjectroles, replace = T) %>% unique() %>% droplevels()
 subjectethnicity_table <- fread("CVtables/subject_ethnicity.tsv", sep = "\t")
 subjectrace_table <- fread("CVtables/subject_race.tsv", sep = "\t")
