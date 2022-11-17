@@ -64,7 +64,7 @@ substances <- 10  #max is 5000
 ## Do you want to include demographic data?
 subjectethnicity <- "yes"  #"yes" or "no"
 subjectrace <-  "yes"  #"yes" or "no"
-subjectsex <-  "yes"  #"yes" or "no"
+subjectsex <-  "no"  #"yes" or "no"
 ### Ages of subjects 
 averageage <- 30  # number or NA to not include age
 standarddev <- 30 # number or NA to not include age
